@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.alfredapp.zhihuplus</string>
+	<key>category</key>
+	<string>Internet</string>
+	<key>connections</key>
+	<dict>
+		<key>0A07374E-5D22-4C13-8D76-C750AAEBEE99</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>F76DF33A-3F72-4BFF-9FFC-0043B8AFE4DD</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>63F60794-BB56-4415-9372-BAF974C3A7E1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>F76DF33A-3F72-4BFF-9FFC-0043B8AFE4DD</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Astraeux</string>
+	<key>description</key>
+	<string>知乎搜索与知乎日报</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>知乎Plus</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>zh</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>正在搜索 {query} ...</string>
+				<key>script</key>
+				<string>require_once('workflows.php');
+$zhihuUrl = "https://www.zhihu.com";
+$articleUrl = "https://zhuanlan.zhihu.com/p";
+$searchUrl = "https://www.zhihu.com/search?q=";
+
+$wf = new Workflows();
+
+$query = "{query}";
+
+$response = $wf-&gt;request("https://www.zhihu.com/autocomplete?max_matches=10&amp;use_similar=0&amp;token=" . urlencode($query));
+$content = json_decode($response);
+$entries = $content[0];
+$count = count($entries);
+
+$types = ['question', 'article', 'people', 'topic', 'search_link'];
+
+for ($i = 1; $i &lt; $count; $i++) {
+    $item = $entries[$i];
+
+    $row = [
+        'uid' =&gt; uniqid(),
+        'arg' =&gt; '',
+        'title' =&gt; $item[1],
+        'subtitle' =&gt; "[$item[0]] $item[1]",
+        'icon' =&gt; "appicons/$item[0].png",
+        'valid' =&gt; 'yes',
+        'autocomplete' =&gt; null,
+    ];
+
+    switch ($item[0]) {
+        case 'question':
+            $row['arg'] = "$zhihuUrl/$item[0]/$item[3]";
+            $row['subtitle'] = "$item[4] 个回答";
+            break;
+        case 'article':
+            $row['arg'] = "$articleUrl/$item[3]";
+            $row['subtitle'] = "$item[4] 个赞";
+            break;
+        case 'people':
+            $row['arg'] = "$zhihuUrl/$item[0]/$item[2]";
+            if (isset($item[7]) &amp;&amp; !empty($item[7])) {
+                $row['title'] .= " ✓";
+                $row['subtitle'] = "[$item[7]] $item[5]";
+            } else {
+                $row['subtitle'] = "$item[5]";
+            }
+            break;
+        case 'topic':
+            $row['arg'] = "$zhihuUrl/$item[0]/$item[2]";
+            $row['subtitle'] = "$item[6] 个精华回答";
+            break;
+        case 'search_link':
+            $row['arg'] = "$searchUrl" . urlencode($query);
+            $row['title'] = "查看全部搜索结果";
+            $row['subtitle'] = "";
+            break;
+        default:
+            $row['arg'] = "$zhihuUrl/$item[0]/$item[2]";
+            break;
+    }
+
+    $rows[$item[0]][] = $row;
+}
+
+foreach ($types as $type) {
+    if (isset($rows[$type]) &amp;&amp; is_array($rows[$type])) {
+        foreach ($rows[$type] as $row) {
+            $wf-&gt;result($row['uid'], $row['arg'], $row['title'], $row['subtitle'], $row['icon'], $row['valid'], $row['autocomplete']);
+        }
+    }
+}
+
+echo $wf-&gt;toxml();
+</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>请输入问题、文章、话题或用户</string>
+				<key>title</key>
+				<string>知乎搜索</string>
+				<key>type</key>
+				<integer>1</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>63F60794-BB56-4415-9372-BAF974C3A7E1</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>{query}</string>
+				<key>utf8</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>F76DF33A-3F72-4BFF-9FFC-0043B8AFE4DD</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>zhdaily</string>
+				<key>queuedelaycustom</key>
+				<integer>1</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>正在查询...</string>
+				<key>script</key>
+				<string>require_once('workflows.php');
+$wf = new Workflows();
+$response = $wf-&gt;request("http://news.at.zhihu.com/api/1.2/news/latest");
+$content = json_decode($response);
+
+$news = $content-&gt;news;
+
+for( $i=0; $i&lt;count($news); $i++) {
+  $item = $news[$i];
+  $wf-&gt;result(uniqid(), $item-&gt;share_url , $item-&gt;title, "", $icon);
+}
+
+echo $wf-&gt;toxml();</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>为你提供最高质、最深度、最有收获的阅读体验</string>
+				<key>title</key>
+				<string>知乎日报</string>
+				<key>type</key>
+				<integer>1</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>0A07374E-5D22-4C13-8D76-C750AAEBEE99</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string># Project Source
+
+* Github: https://github.com/Astraeux/Alfred-Workflows
+
+# Contact
+
+* Astraeux (astraeux@gmail.com)</string>
+	<key>uidata</key>
+	<dict>
+		<key>0A07374E-5D22-4C13-8D76-C750AAEBEE99</key>
+		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
+			<key>ypos</key>
+			<real>170</real>
+		</dict>
+		<key>63F60794-BB56-4415-9372-BAF974C3A7E1</key>
+		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
+			<key>ypos</key>
+			<real>50</real>
+		</dict>
+		<key>F76DF33A-3F72-4BFF-9FFC-0043B8AFE4DD</key>
+		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
+			<key>ypos</key>
+			<real>100</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>https://github.com/Astraeux/Alfred-Workflows</string>
+</dict>
+</plist>
