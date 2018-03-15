@@ -212,18 +212,22 @@ echo $wf-&gt;toxml();
 				<key>script</key>
 				<string>require_once('workflows.php');
 $wf = new Workflows();
-$response = $wf-&gt;request("http://news.at.zhihu.com/api/1.2/news/latest");
+$storyUrl = 'http://daily.zhihu.com/story';
+
+$response = $wf-&gt;request('http://news.at.zhihu.com/api/4/stories/latest');
 $content = json_decode($response);
 
-$news = $content-&gt;news;
-$count = count($news);
+$stories = $content-&gt;stories;
+$count = count($stories);
 
 for( $i = 0; $i &lt; $count; $i++) {
-    $item = $news[$i];
-    $wf-&gt;result(uniqid(), $item-&gt;share_url , $item-&gt;title, '', '');
+    $item = $stories[$i];
+    $url = $storyUrl . '/' . $item-&gt;id;
+    $wf-&gt;result(uniqid(), $url , $item-&gt;title, '', '');
 }
 
-echo $wf-&gt;toxml();</string>
+echo $wf-&gt;toxml();
+</string>
 				<key>scriptargtype</key>
 				<integer>0</integer>
 				<key>scriptfile</key>
