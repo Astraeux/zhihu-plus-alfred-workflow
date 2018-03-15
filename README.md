@@ -1,5 +1,6 @@
 # 知乎 Plus
 给知乎用户的 Alfred Workflow，支持 Alfred 2 / 3。
+
 灵感源自 [KJlmfe](https://github.com/KJlmfe/Alfred-workflows/)。
 
 ## Feature - 功能
