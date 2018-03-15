@@ -42,7 +42,7 @@
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>知乎Plus</string>
+	<string>Zhihu Plus</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -216,10 +216,11 @@ $response = $wf-&gt;request("http://news.at.zhihu.com/api/1.2/news/latest");
 $content = json_decode($response);
 
 $news = $content-&gt;news;
+$count = count($news);
 
-for( $i=0; $i&lt;count($news); $i++) {
-  $item = $news[$i];
-  $wf-&gt;result(uniqid(), $item-&gt;share_url , $item-&gt;title, "", $icon);
+for( $i = 0; $i &lt; $count; $i++) {
+    $item = $news[$i];
+    $wf-&gt;result(uniqid(), $item-&gt;share_url , $item-&gt;title, '', '');
 }
 
 echo $wf-&gt;toxml();</string>
