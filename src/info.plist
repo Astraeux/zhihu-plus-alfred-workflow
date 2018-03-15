@@ -38,7 +38,7 @@
 	<key>createdby</key>
 	<string>Astraeux</string>
 	<key>description</key>
-	<string>知乎搜索与知乎日报</string>
+	<string>给知乎用户的Alfred Workflow</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
@@ -198,7 +198,7 @@ echo $wf-&gt;toxml();
 				<key>escaping</key>
 				<integer>127</integer>
 				<key>keyword</key>
-				<string>zhdaily</string>
+				<string>zhd</string>
 				<key>queuedelaycustom</key>
 				<integer>1</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -229,7 +229,7 @@ echo $wf-&gt;toxml();</string>
 				<key>scriptfile</key>
 				<string></string>
 				<key>subtext</key>
-				<string>为你提供最高质、最深度、最有收获的阅读体验</string>
+				<string>提供最高质、最深度、最有收获的阅读体验</string>
 				<key>title</key>
 				<string>知乎日报</string>
 				<key>type</key>
@@ -278,6 +278,6 @@ echo $wf-&gt;toxml();</string>
 		</dict>
 	</dict>
 	<key>webaddress</key>
-	<string>https://github.com/Astraeux/Alfred-Workflows</string>
+	<string>https://github.com/Astraeux/zhihu-plus-alfred-workflow</string>
 </dict>
 </plist>
