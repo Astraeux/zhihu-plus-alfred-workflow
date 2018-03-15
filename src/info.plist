@@ -248,7 +248,8 @@ echo $wf-&gt;toxml();</string>
 	<key>readme</key>
 	<string># Project Source
 
-* Github: https://github.com/Astraeux/Alfred-Workflows
+* Github: https://github.com/Astraeux/zhihu-plus-alfred-workflow
+
 
 # Contact
 
