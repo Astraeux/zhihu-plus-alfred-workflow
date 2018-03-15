@@ -38,11 +38,11 @@
 	<key>createdby</key>
 	<string>Astraeux</string>
 	<key>description</key>
-	<string>给知乎用户的Alfred Workflow</string>
+	<string>给知乎用户的 Alfred Workflow</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Zhihu Plus</string>
+	<string>知乎 Plus</string>
 	<key>objects</key>
 	<array>
 		<dict>
